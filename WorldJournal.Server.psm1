@@ -17,15 +17,7 @@ WorldJournal.Server.psm1
     
 #>
 
-$xmlPath = (Split-Path (Split-Path ($MyInvocation.MyCommand.Path) -Parent) -Parent)+"\_DoNotRepository\"+(($MyInvocation.MyCommand.Name) -replace '.psm1', '.xml')
-
-if (Test-Path $xmlPath){
-    # do nothing
-}else{
-    # create new xml file
-    . ($xmlPath -replace 'WorldJournal.Server.xml', 'CreateServerXml.ps1') -Overwrite true
-}
-
+$xmlPath = (Split-Path (Split-Path (Split-Path ($MyInvocation.MyCommand.Path) -Parent) -Parent) -Parent)+"\_DoNotRepository\"+(($MyInvocation.MyCommand.Name) -replace '.psm1', '.xml')
 [xml]$xml = Get-Content $xmlPath -Encoding UTF8
 
 function Get-WJPath() {
