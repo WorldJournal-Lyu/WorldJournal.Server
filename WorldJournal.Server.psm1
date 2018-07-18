@@ -33,7 +33,7 @@ function Get-WJPath() {
         $attributes1.ParameterSetName = '__AllParameterSets'
         $attributeCollection1 = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
         $attributeCollection1.Add($attributes1)
-        $values1 = $xml.Root.Local.NetworkPath.Name | Select-Object -Unique
+        $values1 = $xml.Root.WJPath.NetworkPath.Name | Select-Object -Unique
         $validateSet1 = New-Object System.Management.Automation.ValidateSetAttribute($values1)    
         $attributeCollection1.Add($validateSet1)
         $dynamicParam1 = New-Object -Type System.Management.Automation.RuntimeDefinedParameter(
@@ -45,7 +45,7 @@ function Get-WJPath() {
         $attributes2.ParameterSetName = '__AllParameterSets'
         $attributeCollection2 = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
         $attributeCollection2.Add($attributes2)
-        $values2 = $xml.Root.Local.NetworkPath.Path | Select-Object -Unique
+        $values2 = $xml.Root.WJPath.NetworkPath.Path | Select-Object -Unique
         $validateSet2 = New-Object System.Management.Automation.ValidateSetAttribute($values2)    
         $attributeCollection2.Add($validateSet2)
         $dynamicParam2 = New-Object -Type System.Management.Automation.RuntimeDefinedParameter(
@@ -72,10 +72,10 @@ function Get-WJPath() {
         $whereBlock = [scriptblock]::Create( $whereString )
 
         if ($PSBoundParameters.Count -ne 0) {
-            $xml.Root.Local.NetworkPath | Where-Object -FilterScript $whereBlock | Select-Object Name, Path
+            $xml.Root.WJPath.NetworkPath | Where-Object -FilterScript $whereBlock | Select-Object Name, Path
         }
         else {
-            $xml.Root.Local.NetworkPath |  Select-Object Name, Path
+            $xml.Root.WJPath.NetworkPath |  Select-Object Name, Path
         }
 
     }
@@ -96,7 +96,7 @@ function Get-WJFTP() {
         $attributes.ParameterSetName = '__AllParameterSets'
         $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
         $attributeCollection.Add($attributes)
-        $values = $xml.Root.Remote.FileTransferProtocol.Name | Select-Object -Unique
+        $values = $xml.Root.WJFTP.NetworkPath.Name | Select-Object -Unique
         $validateSet = New-Object System.Management.Automation.ValidateSetAttribute($values)    
         $attributeCollection.Add($validateSet)
         $dynamicParam = New-Object -Type System.Management.Automation.RuntimeDefinedParameter(
@@ -120,10 +120,58 @@ function Get-WJFTP() {
         $whereBlock = [scriptblock]::Create( $whereString )
 
         if ($PSBoundParameters.Count -ne 0) {
-            $xml.Root.Remote.FileTransferProtocol | Where-Object -FilterScript $whereBlock | Select-Object Name, Path, User, Pass
+            $xml.Root.WJFTP.NetworkPath | Where-Object -FilterScript $whereBlock | Select-Object Name, Path, User, Pass
         }
         else {
-            $xml.Root.Remote.FileTransferProtocol | Select-Object Name, Path, User, Pass
+            $xml.Root.WJFTP.NetworkPath | Select-Object Name, Path, User, Pass
+        }
+
+    }
+    end {}
+}
+
+
+
+function Get-WJHTTP() {
+    [CmdletBinding()]
+    Param ()
+    DynamicParam {
+
+        $paramDictionary = New-Object -Type System.Management.Automation.RuntimeDefinedParameterDictionary
+
+        $attributes = New-Object System.Management.Automation.ParameterAttribute
+        $attributes.Mandatory = $false
+        $attributes.ParameterSetName = '__AllParameterSets'
+        $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
+        $attributeCollection.Add($attributes)
+        $values = $xml.Root.WJHTTP.NetworkPath.Name | Select-Object -Unique
+        $validateSet = New-Object System.Management.Automation.ValidateSetAttribute($values)    
+        $attributeCollection.Add($validateSet)
+        $dynamicParam = New-Object -Type System.Management.Automation.RuntimeDefinedParameter(
+            "Name", [string], $attributeCollection
+        )
+
+        $paramDictionary.Add("Name", $dynamicParam)
+
+        return $paramDictionary
+
+    }
+
+    begin {}
+    process {
+
+        $Name = $PSBoundParameters.Name
+    
+        $whereArray = @()
+        if ($Name -ne $null) { $whereArray += '$_.Name -eq $Name' }
+        $whereString = $whereArray -Join " -and "  
+        $whereBlock = [scriptblock]::Create( $whereString )
+
+        if ($PSBoundParameters.Count -ne 0) {
+            $xml.Root.WJHTTP.NetworkPath | Where-Object -FilterScript $whereBlock | Select-Object Name, Path
+        }
+        else {
+            $xml.Root.WJHTTP.NetworkPath | Select-Object Name, Path
         }
 
     }
@@ -152,7 +200,7 @@ function Get-WJDrive() {
         $attributes.ParameterSetName = '__AllParameterSets'
         $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
         $attributeCollection.Add($attributes)
-        $values = $xml.Root.Local.NetworkPath.Letter | Select-Object -Unique
+        $values = $xml.Root.WJPath.NetworkPath.Letter | Select-Object -Unique
         $validateSet = New-Object System.Management.Automation.ValidateSetAttribute($values)    
         $attributeCollection.Add($validateSet)
         $dynamicParam = New-Object -Type System.Management.Automation.RuntimeDefinedParameter(
@@ -164,7 +212,7 @@ function Get-WJDrive() {
         $attributes1.ParameterSetName = '__AllParameterSets'
         $attributeCollection1 = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
         $attributeCollection1.Add($attributes1)
-        $values1 = $xml.Root.Local.NetworkPath.Department | Select-Object -Unique
+        $values1 = $xml.Root.WJPath.NetworkPath.Department | Select-Object -Unique
         $validateSet1 = New-Object System.Management.Automation.ValidateSetAttribute($values1)    
         $attributeCollection1.Add($validateSet1)
         $dynamicParam1 = New-Object -Type System.Management.Automation.RuntimeDefinedParameter(
@@ -176,7 +224,7 @@ function Get-WJDrive() {
         $attributes2.ParameterSetName = '__AllParameterSets'
         $attributeCollection2 = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
         $attributeCollection2.Add($attributes2)
-        $values2 = $xml.Root.Local.NetworkPath.Path | Select-Object -Unique
+        $values2 = $xml.Root.WJPath.NetworkPath.Path | Select-Object -Unique
         $validateSet2 = New-Object System.Management.Automation.ValidateSetAttribute($values2)    
         $attributeCollection2.Add($validateSet2)
         $dynamicParam2 = New-Object -Type System.Management.Automation.RuntimeDefinedParameter(
@@ -188,7 +236,7 @@ function Get-WJDrive() {
         $attributes3.ParameterSetName = '__AllParameterSets'
         $attributeCollection3 = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
         $attributeCollection3.Add($attributes3)
-        $values3 = $xml.Root.Local.NetworkPath.Name | Select-Object -Unique
+        $values3 = $xml.Root.WJPath.NetworkPath.Name | Select-Object -Unique
         $validateSet3 = New-Object System.Management.Automation.ValidateSetAttribute($values3)    
         $attributeCollection3.Add($validateSet3)
         $dynamicParam3 = New-Object -Type System.Management.Automation.RuntimeDefinedParameter(
@@ -221,10 +269,10 @@ function Get-WJDrive() {
         $whereBlock = [scriptblock]::Create( $whereString )
 
         if ($PSBoundParameters.Count -ne 0) {
-            $xml.Root.Local.NetworkPath | Where-Object -FilterScript $whereBlock | Select-Object Letter, Department, Path, Name
+            $xml.Root.WJPath.NetworkPath | Where-Object -FilterScript $whereBlock | Select-Object Letter, Department, Path, Name
         }
         else {
-            $xml.Root.Local.NetworkPath |  Select-Object Letter, Department, Path, Name
+            $xml.Root.WJPath.NetworkPath |  Select-Object Letter, Department, Path, Name
         }
 
     }
